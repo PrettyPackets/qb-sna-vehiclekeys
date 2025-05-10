@@ -39,7 +39,7 @@ local function GiveKey(plate, model, player, src)
 			info.lock = lock
 			info.plate = plate
 			info.model = model
-			PrettyLib.AddItemMeta(src, 'vehiclekey', 1, info, "VehicleKeys")
+			PrettyLib.Inventory.AddItemMeta(src, 'vehiclekey', 1, info, "VehicleKeys")
 			TriggerClientEvent('QBCore:Notify', src, Lang:t("message.key_received"), 'success')
 		else
 			TriggerClientEvent('QBCore:Notify', src, Lang:t("message.not_initialized"), 'error')
@@ -105,16 +105,16 @@ RegisterNetEvent('qb-vehiclekeys:server:breakLockpick', function(itemName)
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
     if not (itemName == "lockpick" or itemName == "advancedlockpick") then return end
-	PrettyLib.RemoveItem(src, itemName, 1, "Lockpick Break")
+	PrettyLib.Inventory.RemoveItem(src, itemName, 1, "Lockpick Break")
 end)
 
 RegisterNetEvent('qb-vehiclekeys:server:RemoveKey', function(plate)
 	local src = source
-	local items = PrettyLib.ItemSlotSearch(src, 'vehiclekey')
+	local items = PrettyLib.Inventory.ItemSlotSearch(src, 'vehiclekey')
 	if items then
 		for k,v in pairs(items) do
 			if v.metadata.plate == plate then
-				PrettyLib.RemoveItemSlot(src, 'vehiclekey', 1, v.slot, 'Remove Vehicle Key')
+				PrettyLib.Inventory.RemoveItemSlot(src, 'vehiclekey', 1, v.slot, 'Remove Vehicle Key')
 			end
 		end
 	end
@@ -129,7 +129,7 @@ QBCore.Functions.CreateCallback('qb-vehiclekeys:server:HasKey', function(source,
 		if VehicleList[plate] and VehicleList[plate][citizenid] then
 			cb(true)				
 		else
-			local items = PrettyLib.ItemSlotSearch(src, 'vehiclekey')
+			local items = PrettyLib.Inventory.ItemSlotSearch(src, 'vehiclekey')
 			if items then
 				for k,v in pairs(items) do
 					if v.metadata.plate == plate then
